@@ -4,74 +4,108 @@ from datetime import datetime
 from bots.persona_factory import PersonaFactory
 from simulation.funnel import Funnel, FunnelState
 from simulation.llm_bot import LLMBot
+from simulation.llm_coach_bot import LLMCoachBot
+from simulation.intervention_model import InterventionModel
 
 class SimulationEngine:
     """
-    Orchestrates the simulation of a user journey using an LLM-driven bot.
+    Orchestrates the simulation, including the two-layer coaching system.
     """
-    def __init__(self, personas_path, model_name, output_dir="outputs"):
+    def __init__(self, personas_path, model_name, use_intervention_model=False, enable_coach=True, output_dir="outputs"):
         self.persona_factory = PersonaFactory(personas_path)
         self.model_name = model_name
+        self.use_intervention_model = use_intervention_model
+        self.enable_coach = enable_coach
+        self.intervention_model = InterventionModel() if use_intervention_model and enable_coach else None
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
 
-    def run_simulation(self, segment_id, max_turns=10):
+    def run_simulation(self, segment_id, max_turns=15):
         """
-        Runs a single simulation loop for a given persona segment.
+        Runs a single simulation loop, managing the persona bot and optionally the coach bot.
         """
-        # 1. Generate the Persona and get the LLM Prompt
         persona = self.persona_factory.create_persona(segment_id)
+        persona_bot = LLMBot(persona.llm_prompt, model_name=self.model_name)
         
-        # 2. Initialize the LLM Bot and the Funnel State Machine
-        llm_bot = LLMBot(persona.llm_prompt, model_name=self.model_name)
+        if self.enable_coach:
+            coach_bot = LLMCoachBot(model_name=self.model_name)
+            
         funnel = Funnel()
         
         print(f"--- Starting LLM Simulation for {persona.name} ({segment_id}) ---")
+        if self.enable_coach:
+            print(f"--- Coach Mode: {'Intervention Model' if self.use_intervention_model else 'Hardcoded Prompts'} ---")
+        else:
+            print(f"--- Coach Mode: DISABLED (Training Data Generation) ---")
         
         simulation_log = []
         turn = 0
-        terminal_states = [FunnelState.CONVERSION, FunnelState.ABANDONMENT, FunnelState.OUT_OF_SCOPE]
+        terminal_states = [FunnelState.CONVERSION, FunnelState.ABANDONMENT, FunnelState.OUT_OF_SCOPE, FunnelState.LLM_RESPONSE_ERROR]
 
-        # 3. Main Simulation Loop
         while funnel.current_state not in terminal_states and turn < max_turns:
             turn += 1
             current_state_name = funnel.current_state.name
             allowed_actions = funnel.get_allowed_actions()
             
             print(f"\n[Turn {turn}] State: {current_state_name}")
-            print(f"  Available actions: {allowed_actions}")
 
-            # Get action and signals from the LLM Bot
-            llm_response = llm_bot.get_next_action(current_state_name, allowed_actions)
+            # --- Persona Bot's Turn ---
+            llm_response = persona_bot.get_next_action(current_state_name, allowed_actions)
             
+            # Check for critical LLM failure
+            if llm_response is None:
+                funnel.current_state = FunnelState.LLM_RESPONSE_ERROR
+                break
+
             action = llm_response.get("action")
-            dwell_time = llm_response.get("dwell_time_seconds", 0)
-            reasoning = llm_response.get("reasoning", "No reasoning provided.")
+            print(f"  Bot decided: {action} (Dwell: {llm_response.get('dwell_time_seconds', 0)}s)")
             
-            print(f"  Bot decided: {action} (Dwell: {dwell_time}s) -> Reason: {reasoning}")
-            
-            # Log the turn data
-            turn_data = {
-                "turn": turn,
-                "state": current_state_name,
-                "allowed_actions": allowed_actions,
-                "llm_response": llm_response
-            }
+            turn_data = {"turn": turn, "state": current_state_name, "llm_response": llm_response, "coach_intervention": None}
+
+            # --- Coach Intervention Layer ---
+            if self.enable_coach:
+                trigger_coach = False
+                trigger_context = "No trigger."
+
+                if self.use_intervention_model:
+                    trigger_coach, trigger_context = self.intervention_model.should_trigger(turn_data)
+                else:
+                    trigger_context = ""
+                    if llm_response.get("dwell_time_seconds", 0) > 5:
+                        trigger_coach = True
+                        trigger_context += "User is hesitating (dwell time > 30s)."
+                    if funnel.history.count(funnel.current_state) > 1:
+                         trigger_coach = True
+                         trigger_context += "User returned to this page."
+
+                if trigger_coach:
+                    print(f"  [COACH TRIGGER] Reason: {trigger_context}")
+                    coach_message = coach_bot.get_intervention(current_state_name, llm_response, trigger_context)
+                    print(f"  [COACH SAYS] '{coach_message}'")
+                    
+                    print("  Persona bot is now reacting to the coach...")
+                    llm_response = persona_bot.react_to_coach(coach_message, allowed_actions)
+
+                    if llm_response is None:
+                        funnel.current_state = FunnelState.LLM_RESPONSE_ERROR
+                        break
+                        
+                    action = llm_response.get("action")
+                    print(f"  Bot's new decision: {action}")
+                    
+                    turn_data["coach_intervention"] = {"trigger_context": trigger_context, "coach_message": coach_message, "bot_reaction": llm_response}
+
             simulation_log.append(turn_data)
 
-            # Update the funnel state based on the bot's action
             if action in allowed_actions:
                 funnel.next_state(action)
             else:
-                 print(f"  WARNING: LLM returned invalid action '{action}'. Forcing CANCEL to end loop.")
-                 funnel.next_state("CANCEL")
+                 print(f"  WARNING: LLM returned invalid action '{action}'. Forcing ABANDONMENT.")
+                 funnel.current_state = FunnelState.ABANDONMENT
 
-        # 4. Save the results
         final_state = funnel.current_state.name
         print(f"\n--- Simulation finished. Final state: {final_state} ---")
-        
         self._save_log(persona.name, segment_id, final_state, simulation_log)
-        
         return final_state
 
     def _save_log(self, persona_name, segment_id, final_state, simulation_log):
@@ -80,6 +114,10 @@ class SimulationEngine:
         filename = f"{persona_name.replace(' ', '_')}_{timestamp}_{final_state}.json"
         filepath = os.path.join(self.output_dir, filename)
         
+        coach_mode = "Disabled"
+        if self.enable_coach:
+            coach_mode = 'Intervention Model' if self.use_intervention_model else 'Hardcoded Prompts'
+            
         output_data = {
             "metadata": {
                 "timestamp": timestamp,
@@ -87,7 +125,8 @@ class SimulationEngine:
                 "segment_id": segment_id,
                 "final_state": final_state,
                 "total_turns": len(simulation_log),
-                "model_name": self.model_name
+                "model_name": self.model_name,
+                "coach_mode": coach_mode
             },
             "journey_log": simulation_log
         }

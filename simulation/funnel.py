@@ -13,6 +13,7 @@ class FunnelState(Enum):
     CONVERSION = auto()
     ABANDONMENT = auto()
     OUT_OF_SCOPE = auto()
+    LLM_RESPONSE_ERROR = auto() # New terminal state for JSON errors
 
 class Funnel:
     """
@@ -30,39 +31,46 @@ class Funnel:
             FunnelState.INPUTS_COVERAGE_TYPE: {
                 "SELECT_DOCTOR_VISITS": FunnelState.INPUTS_INSURED_PERSON,
                 "SELECT_HOSPITAL": FunnelState.OUT_OF_SCOPE,
-                "CANCEL": FunnelState.ABANDONMENT
+                "CANCEL": FunnelState.ABANDONMENT,
+                "PAUSE": FunnelState.INPUTS_COVERAGE_TYPE
             },
             FunnelState.INPUTS_INSURED_PERSON: {
                 "SELECT_MYSELF": FunnelState.INPUTS_PERSONAL_DATA,
                 "SELECT_OTHERS": FunnelState.OUT_OF_SCOPE,
                 "GO_BACK": FunnelState.INPUTS_COVERAGE_TYPE,
-                "CANCEL": FunnelState.ABANDONMENT
+                "CANCEL": FunnelState.ABANDONMENT,
+                "PAUSE": FunnelState.INPUTS_INSURED_PERSON
             },
             FunnelState.INPUTS_PERSONAL_DATA: {
                 "PROCEED": FunnelState.PRODUCT_TARIFF_SELECTION,
                 "GO_BACK": FunnelState.INPUTS_INSURED_PERSON,
-                "CANCEL": FunnelState.ABANDONMENT
+                "CANCEL": FunnelState.ABANDONMENT,
+                "PAUSE": FunnelState.INPUTS_PERSONAL_DATA
             },
             FunnelState.PRODUCT_TARIFF_SELECTION: {
                 "SELECT_START_TARIFF": FunnelState.INPUTS_HEALTH_QUESTIONS,
                 "SELECT_OPTIMAL_TARIFF": FunnelState.INPUTS_HEALTH_QUESTIONS,
                 "SELECT_PREMIUM_TARIFF": FunnelState.OUT_OF_SCOPE, # Requires advisor
                 "GO_BACK": FunnelState.INPUTS_PERSONAL_DATA,
-                "CANCEL": FunnelState.ABANDONMENT
+                "CANCEL": FunnelState.ABANDONMENT,
+                "PAUSE": FunnelState.PRODUCT_TARIFF_SELECTION
             },
             FunnelState.INPUTS_HEALTH_QUESTIONS: {
                 "PROCEED": FunnelState.RECOMMENDATION_FINAL_PRICE,
                 "GO_BACK": FunnelState.PRODUCT_TARIFF_SELECTION,
-                "CANCEL": FunnelState.ABANDONMENT
+                "CANCEL": FunnelState.ABANDONMENT,
+                "PAUSE": FunnelState.INPUTS_HEALTH_QUESTIONS
             },
             FunnelState.RECOMMENDATION_FINAL_PRICE: {
                 "ACCEPT_PRICE": FunnelState.CLOSING_PERSONAL_DATA,
                 "GO_BACK": FunnelState.INPUTS_HEALTH_QUESTIONS,
-                "CANCEL": FunnelState.ABANDONMENT
+                "CANCEL": FunnelState.ABANDONMENT,
+                "PAUSE": FunnelState.RECOMMENDATION_FINAL_PRICE
             },
             FunnelState.CLOSING_PERSONAL_DATA: {
                 "PROCEED": FunnelState.CONVERSION, # Simplified for now
-                "CANCEL": FunnelState.ABANDONMENT
+                "CANCEL": FunnelState.ABANDONMENT,
+                "PAUSE": FunnelState.CLOSING_PERSONAL_DATA
             }
         }
 
