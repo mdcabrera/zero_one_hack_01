@@ -5,20 +5,24 @@ from bots.persona_factory import PersonaFactory
 from simulation.funnel import Funnel, FunnelState
 from simulation.llm_bot import LLMBot
 from simulation.llm_coach_bot import LLMCoachBot
-from simulation.intervention_model import InterventionModel
+from simulation.intervention_model import LLMInterventionModel, RuleBasedInterventionModel
 
 class SimulationEngine:
     """
     Orchestrates the simulation, including the two-layer coaching system.
     """
-    def __init__(self, personas_path, model_name, use_intervention_model=False, enable_coach=True, output_dir="outputs"):
+    def __init__(self, personas_path, model_name, use_llm_intervention=False, enable_coach=True, output_dir="outputs"):
         self.persona_factory = PersonaFactory(personas_path)
         self.model_name = model_name
-        self.use_intervention_model = use_intervention_model
         self.enable_coach = enable_coach
-        self.intervention_model = InterventionModel() if use_intervention_model and enable_coach else None
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
+
+        # Plug-and-play intervention model
+        if use_llm_intervention:
+            self.intervention_model = LLMInterventionModel(model_name=self.model_name)
+        else:
+            self.intervention_model = RuleBasedInterventionModel()
 
     def run_simulation(self, segment_id, max_turns=15):
         """
@@ -34,11 +38,13 @@ class SimulationEngine:
         
         print(f"--- Starting LLM Simulation for {persona.name} ({segment_id}) ---")
         if self.enable_coach:
-            print(f"--- Coach Mode: {'Intervention Model' if self.use_intervention_model else 'Hardcoded Prompts'} ---")
+            mode = "LLM" if isinstance(self.intervention_model, LLMInterventionModel) else "Rule-Based"
+            print(f"--- Coach Trigger Mode: {mode} ---")
         else:
-            print(f"--- Coach Mode: DISABLED (Training Data Generation) ---")
+            print(f"--- Coach Mode: DISABLED ---")
         
         simulation_log = []
+        session_data = {} # To store collected personal data across the session
         turn = 0
         terminal_states = [FunnelState.CONVERSION, FunnelState.ABANDONMENT, FunnelState.OUT_OF_SCOPE, FunnelState.LLM_RESPONSE_ERROR]
 
@@ -49,10 +55,8 @@ class SimulationEngine:
             
             print(f"\n[Turn {turn}] State: {current_state_name}")
 
-            # --- Persona Bot's Turn ---
             llm_response = persona_bot.get_next_action(current_state_name, allowed_actions)
             
-            # Check for critical LLM failure
             if llm_response is None:
                 funnel.current_state = FunnelState.LLM_RESPONSE_ERROR
                 break
@@ -60,26 +64,29 @@ class SimulationEngine:
             action = llm_response.get("action")
             print(f"  Bot decided: {action} (Dwell: {llm_response.get('dwell_time_seconds', 0)}s)")
             
-            turn_data = {"turn": turn, "state": current_state_name, "llm_response": llm_response, "coach_intervention": None}
+            if "personal_data_entered" in llm_response:
+                session_data.update(llm_response["personal_data_entered"])
+                print(f"  Bot entered data: {llm_response['personal_data_entered']}")
 
-            # --- Coach Intervention Layer ---
+            turn_data = {
+                "turn": turn, 
+                "state": current_state_name, 
+                "llm_response": llm_response, 
+                "session_data_so_far": session_data.copy(),
+                "intervention_model_decision": None, # New field for logging
+                "coach_intervention": None
+            }
+
             if self.enable_coach:
-                trigger_coach = False
-                trigger_context = "No trigger."
-
-                if self.use_intervention_model:
-                    trigger_coach, trigger_context = self.intervention_model.should_trigger(turn_data)
-                else:
-                    trigger_context = ""
-                    if llm_response.get("dwell_time_seconds", 0) > 5:
-                        trigger_coach = True
-                        trigger_context += "User is hesitating (dwell time > 30s)."
-                    if funnel.history.count(funnel.current_state) > 1:
-                         trigger_coach = True
-                         trigger_context += "User returned to this page."
+                trigger_coach, trigger_context = self.intervention_model.should_trigger(turn_data)
+                
+                # Add explicit logging for the intervention model's decision
+                intervention_decision = {"trigger": trigger_coach, "strategy": trigger_context}
+                turn_data["intervention_model_decision"] = intervention_decision
+                print(f"  [Intervention Model] Decided: {intervention_decision}")
 
                 if trigger_coach:
-                    print(f"  [COACH TRIGGER] Reason: {trigger_context}")
+                    print(f"  [COACH TRIGGERED] Strategy: {trigger_context}")
                     coach_message = coach_bot.get_intervention(current_state_name, llm_response, trigger_context)
                     print(f"  [COACH SAYS] '{coach_message}'")
                     
@@ -105,10 +112,10 @@ class SimulationEngine:
 
         final_state = funnel.current_state.name
         print(f"\n--- Simulation finished. Final state: {final_state} ---")
-        self._save_log(persona.name, segment_id, final_state, simulation_log)
+        self._save_log(persona.name, segment_id, final_state, simulation_log, session_data)
         return final_state
 
-    def _save_log(self, persona_name, segment_id, final_state, simulation_log):
+    def _save_log(self, persona_name, segment_id, final_state, simulation_log, session_data):
         """Saves the simulation run to a JSON file."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{persona_name.replace(' ', '_')}_{timestamp}_{final_state}.json"
@@ -116,7 +123,7 @@ class SimulationEngine:
         
         coach_mode = "Disabled"
         if self.enable_coach:
-            coach_mode = 'Intervention Model' if self.use_intervention_model else 'Hardcoded Prompts'
+            coach_mode = "LLM" if isinstance(self.intervention_model, LLMInterventionModel) else "Rule-Based"
             
         output_data = {
             "metadata": {
@@ -126,7 +133,8 @@ class SimulationEngine:
                 "final_state": final_state,
                 "total_turns": len(simulation_log),
                 "model_name": self.model_name,
-                "coach_mode": coach_mode
+                "coach_mode": coach_mode,
+                "final_collected_data": session_data
             },
             "journey_log": simulation_log
         }

@@ -3,20 +3,20 @@ import random
 from simulation.engine import SimulationEngine
 from bots.persona_factory import PersonaFactory
 
-def run_simulations(personas_path, num_simulations, model_name, use_intervention_model, enable_coach):
+def run_simulations(personas_path, num_simulations, model_name, use_llm_intervention, enable_coach):
     """
     Runs a specified number of simulations with randomly chosen personas.
     """
     mode_text = "DISABLED"
     if enable_coach:
-        mode_text = "Intervention Model" if use_intervention_model else "Hardcoded Prompts"
+        mode_text = "LLM" if use_llm_intervention else "Rule-Based"
     
-    print(f"--- Running {num_simulations} simulation(s) [Coach Mode: {mode_text}] using model: {model_name} ---")
+    print(f"--- Running {num_simulations} simulation(s) [Coach Trigger Mode: {mode_text}] using model: {model_name} ---")
     
     engine = SimulationEngine(
         personas_path, 
         model_name=model_name, 
-        use_intervention_model=use_intervention_model,
+        use_llm_intervention=use_llm_intervention,
         enable_coach=enable_coach
     )
     factory = PersonaFactory(personas_path)
@@ -42,9 +42,9 @@ def main():
         help="Run in data generation mode (disables the coach)."
     )
     parser.add_argument(
-        '--use-intervention-model',
+        '--use-llm-intervention',
         action='store_true',
-        help="Use the external Intervention Model to trigger the coach (default is hardcoded rules)."
+        help="Use the LLM Intervention Model to trigger the coach (default is simple rules)."
     )
     parser.add_argument(
         '--num-simulations',
@@ -55,7 +55,7 @@ def main():
     parser.add_argument(
         '--model',
         type=str,
-        default="meta-llama/Meta-Llama-3.1-8B-Instruct",
+        default="deepseek-ai/DeepSeek-V4-Pro",
         help="The name of the LLM model to use (default: deepseek-ai/DeepSeek-V4-Pro)."
     )
     args = parser.parse_args()
@@ -69,7 +69,7 @@ def main():
         personas_path=personas_json_path, 
         num_simulations=args.num_simulations, 
         model_name=args.model, 
-        use_intervention_model=args.use_intervention_model,
+        use_llm_intervention=True,#args.use_llm_intervention,
         enable_coach=True#coach_is_enabled
     )
 

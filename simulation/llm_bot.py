@@ -12,7 +12,7 @@ class LLMBot:
 
     def get_next_action(self, funnel_state, allowed_actions):
         """
-        Queries the LLM to get the bot's next action, including behavioral signals.
+        Queries the LLM to get the bot's next action, including behavioral signals and generated personal data.
         """
         user_prompt = (
             f"You are currently at the '{funnel_state}' step of the insurance application.\n"
@@ -23,9 +23,15 @@ class LLMBot:
             f" - 'dwell_time_seconds': (integer) How long you spend on the page.\n"
             f" - 'hovers_on_element': (string, optional) The name of an element you hover over.\n"
             f" - 'scroll_behavior': (string, optional) 'scrolls up and down', 'no scrolling'.\n"
-            f" - 'reasoning': (string) A brief explanation for your choice."
+            f" - 'reasoning': (string) A brief explanation for your choice.\n"
         )
         
+        # If we are at the data collection steps, ask the bot to generate the data
+        if funnel_state in ["INPUTS_PERSONAL_DATA", "CLOSING_PERSONAL_DATA"]:
+            user_prompt += (
+                f" - 'personal_data_entered': (object) Since you are at a data entry step, provide a JSON object representing the data you entered (e.g., age, fake name, etc., consistent with your persona). If you cancel or pause without entering data, this can be empty.\n"
+            )
+
         return self._send_prompt(user_prompt)
 
     def react_to_coach(self, coach_message, allowed_actions):
@@ -56,5 +62,4 @@ class LLMBot:
             return parsed_response
         except (json.JSONDecodeError, TypeError):
             print(f"FATAL ERROR: Failed to decode LLM response into JSON: {raw_response}")
-            # Return None to signal a critical failure to the simulation engine
             return None
