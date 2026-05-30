@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "timestamp": "20260530_212852",
+    "persona_name": "Franz Huber",
+    "segment_id": "segment_2",
+    "final_state": "ABANDONMENT",
+    "total_turns": 2,
+    "model_name": "deepseek-ai/DeepSeek-V4-Pro",
+    "coach_mode": "Rule-Based",
+    "final_collected_data": {}
+  },
+  "journey_log": [
+    {
+      "turn": 1,
+      "state": "START",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 15,
+        "reasoning": "Mock reasoning"
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 2,
+      "state": "INPUTS_COVERAGE_TYPE",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 15,
+        "reasoning": "Mock reasoning"
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    }
+  ]
+}

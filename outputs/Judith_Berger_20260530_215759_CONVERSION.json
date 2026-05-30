@@ -1,0 +1,225 @@
+{
+  "metadata": {
+    "timestamp": "20260530_215759",
+    "persona_name": "Judith Berger",
+    "segment_id": "segment_1",
+    "final_state": "CONVERSION",
+    "total_turns": 8,
+    "model_name": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "coach_mode": "LLM",
+    "final_collected_data": {
+      "name": "Judith Berger",
+      "date_of_birth": "01/01/1960",
+      "address": "Lower Austria",
+      "phone_number": "1234567890",
+      "email": "judith.berger@example.com",
+      "policy_number": "1234567890"
+    }
+  },
+  "journey_log": [
+    {
+      "turn": 1,
+      "state": "START",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 5,
+        "reasoning": "I'd like to get started with the application process, but I'm not sure what to expect. I'm hoping that proceeding will lead me to a more detailed and informative page that will help me make a decision."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "None"
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 2,
+      "state": "INPUTS_COVERAGE_TYPE",
+      "llm_response": {
+        "action": "SELECT_DOCTOR_VISITS",
+        "dwell_time_seconds": 10,
+        "reasoning": "I'm looking for a clear and straightforward way to select the coverage type. Since 'SELECT_DOCTOR_VISITS' is a specific option, I'll choose it in hopes that it will lead to a more personalized and relevant section of the application."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "None"
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 3,
+      "state": "INPUTS_INSURED_PERSON",
+      "llm_response": {
+        "action": "SELECT_MYSELF",
+        "dwell_time_seconds": 8,
+        "reasoning": "Since I'm applying for health insurance, it's likely that I'll be the insured person, so I'll select myself to proceed with the application."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "None"
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 4,
+      "state": "INPUTS_PERSONAL_DATA",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 12,
+        "reasoning": "I've entered my personal data, and I'm ready to proceed with the application. I'll review the information I've entered: {\"name\": \"Judith Berger\", \"date_of_birth\": \"01/01/1960\", \"address\": \"Lower Austria\", \"phone_number\": \"1234567890\"}. I'm hoping that proceeding will lead to a more detailed and informative page that will help me make a decision.",
+        "personal_data_entered": {
+          "name": "Judith Berger",
+          "date_of_birth": "01/01/1960",
+          "address": "Lower Austria",
+          "phone_number": "1234567890"
+        }
+      },
+      "session_data_so_far": {
+        "name": "Judith Berger",
+        "date_of_birth": "01/01/1960",
+        "address": "Lower Austria",
+        "phone_number": "1234567890"
+      },
+      "intervention_model_decision": {
+        "trigger": true,
+        "strategy": "Segment 1 (Rising Hybrids) - Judith Berger: Intervene with a reassuring message, highlighting the importance of reviewing personal data before proceeding, and offering to guide her through the application process."
+      },
+      "coach_intervention": {
+        "trigger_context": "Segment 1 (Rising Hybrids) - Judith Berger: Intervene with a reassuring message, highlighting the importance of reviewing personal data before proceeding, and offering to guide her through the application process.",
+        "coach_message": "Great job taking the time to review your personal data, Judith! It's completely normal to double-check before proceeding. I'm here to support you every step of the way. Please take a deep breath and let's move forward together. What would you like to review next? Your health insurance options or our coverage plans?",
+        "bot_reaction": {
+          "action": "PROCEED",
+          "dwell_time_seconds": 5,
+          "reasoning": "I feel more at ease with the customer service coach's support. I'll proceed with the application, and I'm looking forward to reviewing the health insurance options and coverage plans with their guidance.",
+          "hovers_on_element": "Health Insurance Options",
+          "scroll_behavior": "no scrolling",
+          "personal_data_reviewed": true
+        }
+      }
+    },
+    {
+      "turn": 5,
+      "state": "PRODUCT_TARIFF_SELECTION",
+      "llm_response": {
+        "action": "SELECT_OPTIMAL_TARIFF",
+        "dwell_time_seconds": 10,
+        "reasoning": "I'm looking for a balance between price and coverage, so I'll select the Optimal Tariff. I'm hoping that this option will provide the best value for my needs.",
+        "hovers_on_element": "Optimal Tariff",
+        "scroll_behavior": "scrolls up and down",
+        "monologue": "I'm trying to find the sweet spot between cost and benefits."
+      },
+      "session_data_so_far": {
+        "name": "Judith Berger",
+        "date_of_birth": "01/01/1960",
+        "address": "Lower Austria",
+        "phone_number": "1234567890"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "None"
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 6,
+      "state": "INPUTS_HEALTH_QUESTIONS",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 8,
+        "reasoning": "I'll answer the health questions as honestly as possible. I'm hoping that the application will guide me through the process and provide me with the necessary information to make an informed decision.",
+        "hovers_on_element": "Yes/No Question 1",
+        "scroll_behavior": "no scrolling",
+        "monologue": "I just want to get through this step so I can see what my options are."
+      },
+      "session_data_so_far": {
+        "name": "Judith Berger",
+        "date_of_birth": "01/01/1960",
+        "address": "Lower Austria",
+        "phone_number": "1234567890"
+      },
+      "intervention_model_decision": {
+        "trigger": true,
+        "strategy": "Segment 1 (Rising Hybrids) - Judith Berger: Intervene with a gentle reminder to answer health questions carefully, as they will affect the application outcome, and offer support if needed."
+      },
+      "coach_intervention": {
+        "trigger_context": "Segment 1 (Rising Hybrids) - Judith Berger: Intervene with a gentle reminder to answer health questions carefully, as they will affect the application outcome, and offer support if needed.",
+        "coach_message": "Hey Judith, remember to answer the health questions carefully, as they will help us understand your needs better. Take your time and answer honestly – it's essential for getting the right health insurance coverage. If you need any guidance or have questions about a specific question, feel free to ask, and I'll be here to support you.",
+        "bot_reaction": {
+          "action": "PROCEED",
+          "dwell_time_seconds": 12,
+          "reasoning": "I feel more confident in answering the health questions with the customer service coach's guidance. I'll take my time and answer honestly, knowing that they'll be here to support me if I need it.",
+          "hovers_on_element": "Health Question 2",
+          "scroll_behavior": "scrolls up and down",
+          "monologue": "I feel a bit more at ease with the coach's reassurance."
+        }
+      }
+    },
+    {
+      "turn": 7,
+      "state": "RECOMMENDATION_FINAL_PRICE",
+      "llm_response": {
+        "action": "ACCEPT_PRICE",
+        "dwell_time_seconds": 10,
+        "reasoning": "I've reviewed the final price and I'm satisfied with the coverage and cost. I'll accept the price and proceed with the application.",
+        "hovers_on_element": "Total Price",
+        "scroll_behavior": "no scrolling",
+        "monologue": "I'm hoping this is the final step – I'm ready to get started with my health insurance."
+      },
+      "session_data_so_far": {
+        "name": "Judith Berger",
+        "date_of_birth": "01/01/1960",
+        "address": "Lower Austria",
+        "phone_number": "1234567890"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "None"
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 8,
+      "state": "CLOSING_PERSONAL_DATA",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 8,
+        "reasoning": "I'll review the personal data one last time and make sure everything is accurate before proceeding with the application.",
+        "hovers_on_element": "Confirm Personal Data",
+        "scroll_behavior": "no scrolling",
+        "personal_data_entered": {
+          "name": "Judith Berger",
+          "date_of_birth": "01/01/1960",
+          "address": "Lower Austria",
+          "phone_number": "1234567890",
+          "email": "judith.berger@example.com",
+          "policy_number": "1234567890"
+        }
+      },
+      "session_data_so_far": {
+        "name": "Judith Berger",
+        "date_of_birth": "01/01/1960",
+        "address": "Lower Austria",
+        "phone_number": "1234567890",
+        "email": "judith.berger@example.com",
+        "policy_number": "1234567890"
+      },
+      "intervention_model_decision": {
+        "trigger": true,
+        "strategy": "Segment 1 (Rising Hybrids) - Judith Berger: Confirm that she has completed the application successfully and provide a summary of her policy details, as well as offer support for any further questions or concerns."
+      },
+      "coach_intervention": {
+        "trigger_context": "Segment 1 (Rising Hybrids) - Judith Berger: Confirm that she has completed the application successfully and provide a summary of her policy details, as well as offer support for any further questions or concerns.",
+        "coach_message": "Great job, Judith! You've successfully completed the application. Let me summarize your policy details for you: Your name is Judith Berger, your date of birth is 01/01/1960, and you're from Lower Austria. Your policy number is 1234567890, and you can contact us at 1234567890. If you have any questions or concerns about your policy or need further assistance, please don't hesitate to reach out. We're here to support you.",
+        "bot_reaction": {
+          "action": "PROCEED",
+          "dwell_time_seconds": 5,
+          "reasoning": "I'm glad I've completed the application, and I appreciate the customer service coach's summary of my policy details. I'll proceed and review the details carefully.",
+          "speech": "Thank you for your help and support throughout the application process.",
+          "monologue": "I'm relieved to have finished the application – now I just need to review everything and make sure I understand my policy."
+        }
+      }
+    }
+  ]
+}

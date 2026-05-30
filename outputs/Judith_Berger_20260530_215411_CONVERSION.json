@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "timestamp": "20260530_215411",
+    "persona_name": "Judith Berger",
+    "segment_id": "segment_1",
+    "final_state": "CONVERSION",
+    "total_turns": 8,
+    "model_name": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "coach_mode": "Rule-Based",
+    "final_collected_data": {
+      "first_name": "Johann",
+      "last_name": "Berger",
+      "date_of_birth": "1975-02-12",
+      "address": "Tyrol, Austria",
+      "email": "jberger@tyrol.at",
+      "phone_number": "+43 664 1234567"
+    }
+  },
+  "journey_log": [
+    {
+      "turn": 1,
+      "state": "START",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 5,
+        "reasoning": "I'm already at the start of the application, and I don't see any necessary information to review. Proceeding will allow me to move forward with the process."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 2,
+      "state": "INPUTS_COVERAGE_TYPE",
+      "llm_response": {
+        "action": "SELECT_DOCTOR_VISITS",
+        "dwell_time_seconds": 8,
+        "reasoning": "I'm looking for a specific type of coverage, and selecting 'Doctor Visits' seems like a straightforward choice. I'll start with the most basic option and see how the application unfolds."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 3,
+      "state": "INPUTS_INSURED_PERSON",
+      "llm_response": {
+        "action": "SELECT_MYSELF",
+        "dwell_time_seconds": 3,
+        "reasoning": "As a retired individual, I'm the only one insured, so selecting 'Myself' is the most straightforward option."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 4,
+      "state": "INPUTS_PERSONAL_DATA",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 2,
+        "reasoning": "I've provided the necessary personal data, and I'm ready to proceed with the application.",
+        "personal_data_entered": {
+          "first_name": "Johann",
+          "last_name": "Berger",
+          "date_of_birth": "1975-02-12",
+          "address": "Tyrol, Austria"
+        }
+      },
+      "session_data_so_far": {
+        "first_name": "Johann",
+        "last_name": "Berger",
+        "date_of_birth": "1975-02-12",
+        "address": "Tyrol, Austria"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 5,
+      "state": "PRODUCT_TARIFF_SELECTION",
+      "llm_response": {
+        "action": "SELECT_START_TARIFF",
+        "dwell_time_seconds": 4,
+        "reasoning": "I'm looking for a basic, no-frills option, and 'Start Tariff' seems like the most straightforward choice. I can always upgrade later if needed."
+      },
+      "session_data_so_far": {
+        "first_name": "Johann",
+        "last_name": "Berger",
+        "date_of_birth": "1975-02-12",
+        "address": "Tyrol, Austria"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 6,
+      "state": "INPUTS_HEALTH_QUESTIONS",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 2,
+        "reasoning": "I've answered the health questions to the best of my ability, and I'm ready to move forward with the application."
+      },
+      "session_data_so_far": {
+        "first_name": "Johann",
+        "last_name": "Berger",
+        "date_of_birth": "1975-02-12",
+        "address": "Tyrol, Austria"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 7,
+      "state": "RECOMMENDATION_FINAL_PRICE",
+      "llm_response": {
+        "action": "ACCEPT_PRICE",
+        "dwell_time_seconds": 3,
+        "reasoning": "I've reviewed the final price, and it seems reasonable. I'm ready to accept the terms and complete the application."
+      },
+      "session_data_so_far": {
+        "first_name": "Johann",
+        "last_name": "Berger",
+        "date_of_birth": "1975-02-12",
+        "address": "Tyrol, Austria"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 8,
+      "state": "CLOSING_PERSONAL_DATA",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 2,
+        "reasoning": "I've reviewed the application and provided the necessary personal data. I'm ready to proceed with the final submission.",
+        "personal_data_entered": {
+          "email": "jberger@tyrol.at",
+          "phone_number": "+43 664 1234567"
+        }
+      },
+      "session_data_so_far": {
+        "first_name": "Johann",
+        "last_name": "Berger",
+        "date_of_birth": "1975-02-12",
+        "address": "Tyrol, Austria",
+        "email": "jberger@tyrol.at",
+        "phone_number": "+43 664 1234567"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    }
+  ]
+}

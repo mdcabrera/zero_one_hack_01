@@ -55,7 +55,7 @@ def main():
     parser.add_argument(
         '--model',
         type=str,
-        default="deepseek-ai/DeepSeek-V4-Pro",
+        default="meta-llama/Meta-Llama-3.1-8B-Instruct",
         help="The name of the LLM model to use (default: deepseek-ai/DeepSeek-V4-Pro)."
     )
     args = parser.parse_args()
@@ -69,7 +69,7 @@ def main():
         personas_path=personas_json_path, 
         num_simulations=args.num_simulations, 
         model_name=args.model, 
-        use_llm_intervention=True,#args.use_llm_intervention,
+        use_llm_intervention= True,#args.use_llm_intervention,
         enable_coach=True#coach_is_enabled
     )
 

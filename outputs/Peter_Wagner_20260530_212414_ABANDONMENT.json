@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "timestamp": "20260530_212414",
+    "persona_name": "Peter Wagner",
+    "segment_id": "segment_3",
+    "final_state": "ABANDONMENT",
+    "total_turns": 2,
+    "model_name": "deepseek-ai/DeepSeek-V4-Pro",
+    "coach_mode": "LLM",
+    "final_collected_data": {}
+  },
+  "journey_log": [
+    {
+      "turn": 1,
+      "state": "START",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 15,
+        "reasoning": "Mock reasoning"
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No strategy provided."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 2,
+      "state": "INPUTS_COVERAGE_TYPE",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 15,
+        "reasoning": "Mock reasoning"
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No strategy provided."
+      },
+      "coach_intervention": null
+    }
+  ]
+}

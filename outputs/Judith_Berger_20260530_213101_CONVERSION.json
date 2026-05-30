@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "timestamp": "20260530_213101",
+    "persona_name": "Judith Berger",
+    "segment_id": "segment_1",
+    "final_state": "CONVERSION",
+    "total_turns": 8,
+    "model_name": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "coach_mode": "Rule-Based",
+    "final_collected_data": {
+      "first_name": "Judith",
+      "last_name": "Berger",
+      "date_of_birth": "1995-02-12",
+      "gender": "female",
+      "address": "Styria, countryside",
+      "phone_number": "+43 664 1234567",
+      "email_address": "judith.berger@gmail.com"
+    }
+  },
+  "journey_log": [
+    {
+      "turn": 1,
+      "state": "START",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 5,
+        "reasoning": "I'm ready to start the process, but I'm expecting a user-friendly and flexible application that will allow me to easily find the right insurance product for my needs."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 2,
+      "state": "INPUTS_COVERAGE_TYPE",
+      "llm_response": {
+        "action": "SELECT_DOCTOR_VISITS",
+        "dwell_time_seconds": 10,
+        "reasoning": "As a young person, I'm more likely to need doctor visits than hospital stays, so I'll start by selecting that option. I'm hoping the application will be flexible and allow me to easily adjust my selections later if needed."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 3,
+      "state": "INPUTS_INSURED_PERSON",
+      "llm_response": {
+        "action": "SELECT_MYSELF",
+        "dwell_time_seconds": 8,
+        "reasoning": "Since I'm the one applying for insurance, it makes sense to select myself as the insured person. I'm expecting a straightforward process from here."
+      },
+      "session_data_so_far": {},
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 4,
+      "state": "INPUTS_PERSONAL_DATA",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 12,
+        "reasoning": "I've entered my personal data, and I'm ready to proceed. I'm hoping that the application will now take me to a section where I can discuss my options with a personal advisor, as I prefer to have reassurance for important decisions.",
+        "personal_data_entered": {
+          "first_name": "Judith",
+          "last_name": "Berger",
+          "date_of_birth": "1995-02-12",
+          "gender": "female",
+          "address": "Styria, countryside"
+        }
+      },
+      "session_data_so_far": {
+        "first_name": "Judith",
+        "last_name": "Berger",
+        "date_of_birth": "1995-02-12",
+        "gender": "female",
+        "address": "Styria, countryside"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 5,
+      "state": "PRODUCT_TARIFF_SELECTION",
+      "llm_response": {
+        "action": "SELECT_OPTIMAL_TARIFF",
+        "dwell_time_seconds": 15,
+        "reasoning": "I'm looking for a balanced option that meets my needs without breaking the bank. The 'Optimal Tariff' seems like a good middle ground, and I'm hoping it will provide the right level of coverage for me.",
+        "hovers_on_element": "tariff_details",
+        "scroll_behavior": "scrolls up and down"
+      },
+      "session_data_so_far": {
+        "first_name": "Judith",
+        "last_name": "Berger",
+        "date_of_birth": "1995-02-12",
+        "gender": "female",
+        "address": "Styria, countryside"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 6,
+      "state": "INPUTS_HEALTH_QUESTIONS",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 8,
+        "reasoning": "I'm ready to answer the health questions. I'm hoping that the application will guide me through this process and provide clear instructions on what I need to do. I'm expecting a straightforward and easy-to-follow process.",
+        "scroll_behavior": "no scrolling"
+      },
+      "session_data_so_far": {
+        "first_name": "Judith",
+        "last_name": "Berger",
+        "date_of_birth": "1995-02-12",
+        "gender": "female",
+        "address": "Styria, countryside"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 7,
+      "state": "RECOMMENDATION_FINAL_PRICE",
+      "llm_response": {
+        "action": "ACCEPT_PRICE",
+        "dwell_time_seconds": 12,
+        "reasoning": "I've reviewed the final price, and it seems reasonable. I'm ready to accept it and move forward with the application. I'm hoping that this is the final step and that I'll be able to speak with a personal advisor soon to confirm my coverage.",
+        "hovers_on_element": "price_breakdown"
+      },
+      "session_data_so_far": {
+        "first_name": "Judith",
+        "last_name": "Berger",
+        "date_of_birth": "1995-02-12",
+        "gender": "female",
+        "address": "Styria, countryside"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    },
+    {
+      "turn": 8,
+      "state": "CLOSING_PERSONAL_DATA",
+      "llm_response": {
+        "action": "PROCEED",
+        "dwell_time_seconds": 10,
+        "reasoning": "I'm ready to confirm my personal data and complete the application. I'm expecting a smooth and efficient process from here.",
+        "personal_data_entered": {
+          "phone_number": "+43 664 1234567",
+          "email_address": "judith.berger@gmail.com",
+          "address": "Styria, countryside"
+        }
+      },
+      "session_data_so_far": {
+        "first_name": "Judith",
+        "last_name": "Berger",
+        "date_of_birth": "1995-02-12",
+        "gender": "female",
+        "address": "Styria, countryside",
+        "phone_number": "+43 664 1234567",
+        "email_address": "judith.berger@gmail.com"
+      },
+      "intervention_model_decision": {
+        "trigger": false,
+        "strategy": "No trigger condition met."
+      },
+      "coach_intervention": null
+    }
+  ]
+}
